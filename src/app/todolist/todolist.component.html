@@ -1,0 +1,87 @@
+<div class="container" *ngIf="!isLoading; else loading">
+  <nav class="navbar navbar-dark bg-dark mt-2">
+    <a class="navbar-brand ms-2">To-do-list</a>
+    <button
+      type="button"
+      class="btn btn-success me-2"
+      [routerLink]="['/completed']"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Completed task
+    </button>
+  </nav>
+  <hr />
+  <form (ngSubmit)="onSubmit(taskForm)" #taskForm="ngForm">
+    <div class="form-group">
+      <label for="task">Task</label>
+      <input
+        type="text"
+        class="form-control"
+        id="task"
+        placeholder="Inserisci una task"
+        ngModel
+        name="task"
+        required
+      />
+      <small
+        *ngIf="taskForm.invalid && taskForm.dirty"
+        id="errormessage"
+        class="form-text text-danger"
+        >Richiesta fallita</small
+      >
+    </div>
+
+    <button
+      [disabled]="taskForm.invalid"
+      type="submit"
+      class="btn btn-primary mb-5 mt-1"
+      id="submitButton"
+    >
+      Submit
+    </button>
+  </form>
+  <hr />
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Task</th>
+        <th scope="col">Completed</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of taskArray; index as i">
+        <td>{{ t.taskName }}</td>
+        <td>
+          <input
+            (change)="onCheck(i)"
+            class="ms-4"
+            id="myCheckbox"
+            type="checkbox"
+            aria-label="Checkbox for following text input"
+            [checked]="t.isCompleted"
+          />
+        </td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="onDelete(i)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #loading>
+  <div class="spinner-container">
+    <div class="text-center">
+      <p>Recupero task...</p>
+      <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+  </div>
+</ng-template>
+
